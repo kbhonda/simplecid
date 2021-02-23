@@ -1,0 +1,3 @@
+*.tfm -binary
+*.vf  -binary
+*.pdf -binary
