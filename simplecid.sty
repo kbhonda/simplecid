@@ -1,0 +1,55 @@
+\NeedsTeXFormat{pLaTeX2e}
+\RequirePackage{expl3}
+\ProvidesExplPackage{simplecid}{2021/2/21}{v0.1}{using CID for output letter}
+
+
+\cs_if_exist:NTF \Cjscale {} {\def\Cjscale{9.62216}}
+
+\int_const:Nn \l_sCID_subtfm_int {5}
+
+\prop_new:N \g_sCID_NFSS_set_prop
+
+\cs_gset:Npn \sCIDSetting #1#2#3{%
+   \tl_set:cx {l_sCID_#2_tl} {\two@digits{#1}}%
+   \tl_set:Nx \l_sCID_font_tl {#3}%
+   \regex_split:nnN{/}{#2} \l_sCID_NFSS_seq
+   \int_step_inline:nnn{0}{\int_eval:n {\l_sCID_subtfm_int - 1} }{
+      \DeclareFontShape{\seq_item:Nn \l_sCID_NFSS_seq {1}}
+                       {\seq_item:Nn \l_sCID_NFSS_seq {2}}
+                       {\seq_item:Nn \l_sCID_NFSS_seq {3}}
+                       {\seq_item:Nn \l_sCID_NFSS_seq {4}\two@digits{##1}}
+                       {<-> s*[\Cjascale] scid\tl_use:c{l_sCID_#2_tl}-\two@digits{##1}}{}
+      \DeclareFontShape{JT1}
+                       {\seq_item:Nn \l_sCID_NFSS_seq {2}}
+                       {\seq_item:Nn \l_sCID_NFSS_seq {3}}
+                       {\seq_item:Nn \l_sCID_NFSS_seq {4}\two@digits{##1}}
+                       {<-> ssub* mc/m/n }{}
+   }
+}
+
+\int_new:N \l_sCID_n_int
+\int_new:N \l_sCID_r_int
+\int_new:N \l_sCID_ku_int
+\int_new:N \l_sCID_ten_int
+
+\msg_new:nnnn{sCID}{unsetted~font}
+                   {\msg_error_text:n{#1}^^J
+                    Unsetted~font~is~used~for~\token_to_str:N\sCID\space \msg_line_context:.}
+                   {\msg_info_text:n {#1}^^J
+                    Set~the~ID~and~actual~font~for~
+                    \k@encoding/\k@family/\k@series/\k@shape\space Using~\token_to_str:N\sCIDSetting.} 
+
+\cs_gset:Npn \sCID #1 {
+\group_begin:    
+   \int_set:Nn \l_sCID_n_int   {\int_div_truncate:nn {#1-1} {8836}}
+   \int_set:Nn \l_sCID_r_int   {\int_mod:nn {#1-1} {8836}}
+   \int_set:Nn \l_sCID_ku_int  {\int_div_truncate:nn {\l_sCID_r_int} {94} + 1}
+   \int_set:Nn \l_sCID_ten_int {\int_mod:nn {\l_sCID_r_int} {94} + 1}
+   \cs_if_exist:cTF{\k@encoding/\k@family/\k@series/\k@shape\two@digits{\l_sCID_n_int}}
+                   {\kanjishape{\k@shape\two@digits{\l_sCID_n_int}}\selectfont}
+                   {\msg_error:nnn{sCID}{unsetted~font}{simplecid}}
+   \char\jis\int_eval:n{(\l_sCID_ku_int + 32) * 256 + (\l_sCID_ten_int + 32)}
+\group_end:
+}
+
+\endinput
