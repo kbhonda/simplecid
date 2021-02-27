@@ -2,6 +2,9 @@
 \RequirePackage{expl3}
 \ProvidesExplPackage{simplecid}{2021/2/21}{v0.1}{using CID for output letter}
 
+\bool_new:N \l_generate_mapfile_bool
+\bool_set_true:N \l_generate_mapfile_bool
+\ior_new:N \l_mapfile_sCID
 
 \cs_if_exist:NTF \Cjscale {} {\def\Cjscale{9.62216}}
 
