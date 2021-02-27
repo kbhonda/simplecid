@@ -10,20 +10,7 @@
 \prop_new:N \g_sCID_NFSS_set_prop
 
 %% for default mc and gt 
-\int_step_inline:nnn{0}{\int_eval:n {\l_sCID_subtfm_int - 1} }{
-   \DeclareFontShape{JY1}{mc}{m}{n\two@digits{#1}}
-                    {<-> s*[\Cjascale] scidmin-\two@digits{#1}}{}
-   \DeclareFontShape{JT1}{mc}{m}{n\two@digits{#1}}
-                    {<-> ssub* mc/m/n }{}
-   \DeclareFontShape{JY1}{gt}{m}{n\two@digits{#1}}
-                    {<-> s*[\Cjascale] scidgoth-\two@digits{#1}}{}
-   \DeclareFontShape{JT1}{gt}{m}{n\two@digits{#1}}
-                    {<-> ssub* gt/m/n }{}
-   \DeclareFontShape{JY1}{mc}{bx}{n\two@digits{#1}}
-                    {<-> s*[\Cjascale] scidgoth-\two@digits{#1}}{}
-   \DeclareFontShape{JT1}{mc}{bx}{n\two@digits{#1}}
-                    {<-> ssub* gt/m/n }{}
-}
+
 
 \cs_new:Npn \sCIDSetting #1{
    \tl_set:Nn \l_tmpa_tl {#1} 
