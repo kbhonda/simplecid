@@ -4,7 +4,9 @@
 
 \bool_new:N \l_generate_mapfile_bool
 \bool_set_true:N \l_generate_mapfile_bool
+
 \iow_new:N \l_mapfile_sCID_iow
+\tl_ser:Nn \l_mapfilename_sCID {scidfonts.map}
 
 \cs_if_exist:NTF \Cjscale {} {\def\Cjscale{9.62216}}
 
