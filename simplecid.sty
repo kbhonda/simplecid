@@ -43,6 +43,10 @@
          }
       }
    \cs_gset_eq:NN \sCIDSetting   \use_none:n
+   \sCID_generate_map:N \l_sys_backend_str
+}
+
+\cs_new:Nn \sCID_generate_map:N {
 }
 
 \AtBeginDocument{\sCIDSetting{}}
