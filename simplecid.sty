@@ -10,7 +10,8 @@
 \prop_new:N \g_sCID_NFSS_set_prop
 
 %% for default mc and gt 
-
+\tl_set:Nn \l_sCID_default_minfont_tl  {A-OTF-RyuminPro-Light.otf}
+\tl_set:Nn \l_sCID_default_gothfont_tl {A-OTF-GothicBBBPro-Medium.otf}
 
 \cs_new:Npn \sCIDSetting #1{
    \tl_set:Nn \l_tmpa_tl {#1} 
@@ -20,8 +21,8 @@
                                          {\prop_item:Nn \l_tmpa_prop {font~names}}
    \exp_args:NNx\prop_set_from_keyval:Nn \l_sCID_NFSS_names_prop 
                                          {\prop_item:Nn \l_tmpa_prop {NFSS~names}}
-   \prop_put_if_new:Nnn \l_sCID_font_names_prop {min}  {A-OTF-RyuminPro-Light.otf}
-   \prop_put_if_new:Nnn \l_sCID_font_names_prop {goth} {A-OTF-GothicBBBPro-Medium.otf}
+   \exp_args:NNx\prop_put_if_new:Nnn \l_sCID_font_names_prop {\l_sCID_default_minfont_tl}  {min}
+   \exp_args:NNx\prop_put_if_new:Nnn \l_sCID_font_names_prop {\l_sCID_default_gothfont_tl} {goth}
    \prop_put_if_new:Nnn \l_sCID_NFSS_names_prop {JY1/mc/m/n}  {min}
    \prop_put_if_new:Nnn \l_sCID_NFSS_names_prop {JY1/gt/m/n}  {goth}
    \prop_put_if_new:Nnn \l_sCID_NFSS_names_prop {JY1/mc/bx/n} {goth}
