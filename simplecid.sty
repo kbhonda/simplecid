@@ -25,23 +25,39 @@
                     {<-> ssub* gt/m/n }{}
 }
 
-\cs_gset:Npn \sCIDSetting #1#2#3{%
-   \tl_set:cx {l_sCID_#2_tl} {\two@digits{#1}}%
-   \tl_set:Nx \l_sCID_font_tl {#3}%
-   \regex_split:nnN{/}{#2} \l_sCID_NFSS_seq
-   \int_step_inline:nnn{0}{\int_eval:n {\l_sCID_subtfm_int - 1} }{
-      \DeclareFontShape{\seq_item:Nn \l_sCID_NFSS_seq {1}}
-                       {\seq_item:Nn \l_sCID_NFSS_seq {2}}
-                       {\seq_item:Nn \l_sCID_NFSS_seq {3}}
-                       {\seq_item:Nn \l_sCID_NFSS_seq {4}\two@digits{##1}}
-                       {<-> s*[\Cjascale] scid\tl_use:c{l_sCID_#2_tl}-\two@digits{##1}}{}
-      \DeclareFontShape{JT1}
-                       {\seq_item:Nn \l_sCID_NFSS_seq {2}}
-                       {\seq_item:Nn \l_sCID_NFSS_seq {3}}
-                       {\seq_item:Nn \l_sCID_NFSS_seq {4}\two@digits{##1}}
-                       {<-> ssub* mc/m/n }{}
-   }
+\cs_new:Npn \sCIDSetting #1{
+   \tl_set:Nn \l_tmpa_tl {#1} 
+   \regex_replace_all:nnN {  ([-=]+\s*)+>  } {=} \l_tmpa_tl
+   \exp_args:NNx\prop_set_from_keyval:Nn \l_tmpa_prop {\tl_use:N\l_tmpa_tl}
+   \exp_args:NNx\prop_set_from_keyval:Nn \l_sCID_font_names_prop 
+                                         {\prop_item:Nn \l_tmpa_prop {font~names}}
+   \exp_args:NNx\prop_set_from_keyval:Nn \l_sCID_NFSS_names_prop 
+                                         {\prop_item:Nn \l_tmpa_prop {NFSS~names}}
+   \prop_put_if_new:Nnn \l_sCID_font_names_prop {min}  {A-OTF-RyuminPro-Light.otf}
+   \prop_put_if_new:Nnn \l_sCID_font_names_prop {goth} {A-OTF-GothicBBBPro-Medium.otf}
+   \prop_put_if_new:Nnn \l_sCID_NFSS_names_prop {JY1/mc/m/n}  {min}
+   \prop_put_if_new:Nnn \l_sCID_NFSS_names_prop {JY1/gt/m/n}  {goth}
+   \prop_put_if_new:Nnn \l_sCID_NFSS_names_prop {JY1/mc/bx/n} {goth}
+%%% l_font_names_prop : actual name of fonts -> ID
+%%% l_NFSS_names_prop : NFSS name of fonts   -> ID
+   \prop_map_inline:Nn \l_sCID_NFSS_names_prop {
+      \regex_split:nnN{/}{##1} \l_sCID_NFSS_seq
+      \tl_set:cx {l_sCID_##1_tl} { \prop_item:Nn \l_sCID_NFSS_names_prop {##1} }%
+      \int_step_inline:nnn{0}{\int_eval:n {\l_sCID_subtfm_int - 1} }{
+            \DeclareFontShape{\seq_item:Nn \l_sCID_NFSS_seq {1}}
+                             {\seq_item:Nn \l_sCID_NFSS_seq {2}}
+                             {\seq_item:Nn \l_sCID_NFSS_seq {3}}
+                             {\seq_item:Nn \l_sCID_NFSS_seq {4}\two@digits{####1}}
+                             {<-> s*[\Cjascale] scid\tl_use:c{l_sCID_##1_tl}-\two@digits{####1}}{}
+            \DeclareFontShape{JT1}
+                             {\seq_item:Nn \l_sCID_NFSS_seq {2}}
+                             {\seq_item:Nn \l_sCID_NFSS_seq {3}}
+                             {\seq_item:Nn \l_sCID_NFSS_seq {4}\two@digits{####1}}
+                             {<-> ssub* mc/m/n }{}
+         }
+      }
 }
+
 
 \int_new:N \l_sCID_n_int
 \int_new:N \l_sCID_r_int
