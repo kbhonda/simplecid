@@ -46,7 +46,8 @@
          }
       }
    \cs_gset_eq:NN \sCIDSetting   \use_none:n
-   \sCID_generate_map:N \l_sys_backend_str
+   \bool_if:NT \l_generate_mapfile_bool
+      {\sCID_generate_map:N \l_sys_backend_str}
 }
 
 \cs_new:Nn \sCID_generate_map:N {
