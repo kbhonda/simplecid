@@ -47,10 +47,15 @@
       }
    \cs_gset_eq:NN \sCIDSetting   \use_none:n
    \bool_if:NT \l_generate_mapfile_bool
-      {\sCID_generate_map:N \l_sys_backend_str}
+      {\sCID_generate_map:NN \c_sys_backend_str \l_mapfile_sCID_iow}
 }
 
-\cs_new:Nn \sCID_generate_map:N {
+\cs_new:Nn \sCID_generate_map:NN {
+   \exp_args:Nx\str_case:nnF {#1} {
+         {dvips} {\typeout{>>>>>dvips}}
+         {dvipdfmx} {\typeout{>>>>>dvipdfmx}}
+      }
+      {\typeout{>>>>>Driver,~#1,~not~supported}}%%false
 }
 
 \AtBeginDocument{\sCIDSetting{}}
