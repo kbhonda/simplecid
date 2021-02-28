@@ -2,21 +2,26 @@
 \RequirePackage{expl3}
 \ProvidesExplPackage{simplecid}{2021/2/21}{v0.1}{using CID for output letter}
 
+\RequirePackage{xkeyval}
 \RequirePackage{pxatbegshi}
 
 \bool_new:N \l_generate_mapfile_bool
-\bool_set_true:N \l_generate_mapfile_bool
+\DeclareOptionX{generateMap}[true]{\use:c{bool_set_#1:N} \l_generate_mapfile_bool}
 
 \bool_new:N \l_embed_mapfile_bool
-\bool_set_true:N \l_embed_mapfile_bool
+\DeclareOptionX{embedMap}[true]{\use:c{bool_set_#1:N} \l_embed_mapfile_bool}
 
+\DeclareOptionX{mapname}[scidfonts-\c_sys_backend_str.map]{\tl_set:Nx \l_mapfilename_sCID {#1}}
+
+
+
+\ExecuteOptionsX{generateMap,embedMap,mapname}
+\ProcessOptionsX
 
 \iow_new:N \l_mapfile_sCID_iow
-\tl_set:Nx \l_mapfilename_sCID {scidfonts-\c_sys_backend_str.map}
-
 \cs_if_exist:NTF \Cjscale {} {\def\Cjscale{9.62216}}
-
 \int_const:Nn \l_sCID_subtfm_int {4}
+
 
 %% for default min and gt 
 \tl_set:Nn \l_sCID_default_minfont_tl  {HaranoAjiMincho-Regular.otf}
