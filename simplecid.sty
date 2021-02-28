@@ -54,19 +54,37 @@
 
 \cs_new:Nn \sCID_generate_map:N {
    \exp_args:Nx\str_case:nnF {\c_sys_backend_str} {
-         {dvips}    {\sCID_write_dvips_map_iow:N    #1 }
+%         {dvips}    {\sCID_write_dvips_map_iow:N    #1 }
          {dvipdfmx} {\sCID_write_dvipdfmx_map_iow:N #1 }
       }
       {\typeout{>>>>>Driver,~\c_sys_backend_str,~not~supported}}%%false
 }
 
 \cs_new:Nn \sCID_write_dvipdfmx_map_iow:N {
-\typeout{>>>>\c_sys_backend_str}
+   \exp_args:NNx \iow_open:Nn #1 {\l_mapfilename_sCID}
+   \iow_now:Nx #1 {\iow_char:N \%\iow_char:N \%~
+                   This~file~was~generated~by~simplecid~package~for~\c_sys_jobname_str.tex.^^J
+                   \iow_char:N \%\iow_char:N \%~
+                   This~file~is~used~for~dvipdfmx.^^J
+                   \iow_char:N \%\iow_char:N \%~
+                   Direct~modification~is~not~recommended.^^J
+                   \iow_char:N \%\iow_char:N \%~
+                   ~~\int_use:N\c_sys_year_int/
+                     \int_use:N\c_sys_month_int/
+                     \int_use:N\c_sys_day_int~
+                     (\int_use:N\c_sys_hour_int
+                      :
+                      \int_use:N\c_sys_minute_int) ^^J
+                   } 
+   \prop_map_inline:Nn \l_sCID_font_names_prop {
+      \iow_now:Nn #1 {scid##2-raw~Identity-H~##1}
+      } 
+   \iow_close:N #1
 }
 
-\cs_new:Nn \sCID_write_dvips_map_iow:N {
-\typeout{>>>>\c_sys_backend_str}
-}
+%\cs_new:Nn \sCID_write_dvips_map_iow:N {
+%\typeout{>>>>\c_sys_backend_str}
+%}
 
 
 \AtBeginDocument{\sCIDSetting{}}
