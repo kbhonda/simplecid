@@ -2,8 +2,14 @@
 \RequirePackage{expl3}
 \ProvidesExplPackage{simplecid}{2021/2/21}{v0.1}{using CID for output letter}
 
+\RequirePackage{pxatbegshi}
+
 \bool_new:N \l_generate_mapfile_bool
 \bool_set_true:N \l_generate_mapfile_bool
+
+\bool_new:N \l_embed_mapfile_bool
+\bool_set_true:N \l_embed_mapfile_bool
+
 
 \iow_new:N \l_mapfile_sCID_iow
 \tl_set:Nx \l_mapfilename_sCID {scidfonts-\c_sys_backend_str.map}
@@ -50,6 +56,10 @@
    \cs_gset_eq:NN \sCIDSetting   \use_none:n
    \bool_if:NT \l_generate_mapfile_bool
       {\sCID_generate_map:N \l_mapfile_sCID_iow}
+   \bool_if:NT \l_embed_mapfile_bool
+      {\AtBeginDocument{\special{pdf:mapfile~\tl_use:N \l_mapfilename_sCID}}
+       \AtBeginShipout{\special{pdf:mapfile~\tl_use:N \l_mapfilename_sCID}}
+      }
 }
 
 \cs_new:Nn \sCID_generate_map:N {
