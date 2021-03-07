@@ -97,10 +97,6 @@
    \iow_close:N #1
 }
 
-%\cs_new:Nn \sCID_write_dvips_map_iow:N {
-%\typeout{>>>>\c_sys_backend_str}
-%}
-
 
 \AtBeginDocument{\sCIDSetting{}}
 
@@ -134,9 +130,11 @@
 \file_input:n {scid-prop.dat}
 
 
-%%%alias for sCID
-\cs_new:Npn \scidSym #1 {
+%%%aliases for sCID
+\cs_new:Npn \sCIDSym #1 {
     \sCID{\prop_item:Nn \g_scid_symlist_prop {#1}}
 }
+
+\cs_new:Npn \sCIDMaru #1{\sCIDSym{丸#1}}
 
 \endinput
