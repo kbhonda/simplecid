@@ -1,8 +1,8 @@
-\ProvideExplFile{scid-prop.dat}{2021/3/7}{v0.1}{property list for simplecid}
+%\ProvidesExplFile{scid-prop.dat}{2021/03/07}{0.1}{property list for simplecid}
 
-\prop_new:N \g_scid_symprop_prop
+\prop_new:N \g_scid_symlist_prop
 
-\prop_set_from_keyval:Nn \g_scid_symprop_prop{
+\prop_set_from_keyval:Nn \g_scid_symlist_prop{
 丸0 = 8225,
 丸1 = 7555,
 丸2 = 7556,
@@ -27,11 +27,11 @@
 丸11 = 7565,
 丸12 = 7566, 
 丸13 = 7567,
-丸14 = 7568
+丸14 = 7568,
 丸15 = 7569,
 丸16 = 7570,
-丸17 = 7571 
-丸18 = 7572
+丸17 = 7571,
+丸18 = 7572,
 丸19 = 7573,
 丸20 = 7574,
 丸21 = 8091, 
@@ -63,9 +63,9 @@
 丸47 = 10259,
 丸48 = 10260,
 丸49 = 10261,
-丸50 = 10262
+丸50 = 10262,
 丸51 = 10263, 
-丸52 = 10264
+丸52 = 10264,
 丸53 = 10265,
 丸54 = 10266,
 丸55 = 10267,
