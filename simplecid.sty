@@ -35,12 +35,12 @@
                                          {\prop_item:Nn \l_tmpa_prop {font~names}}
    \exp_args:NNx\prop_set_from_keyval:Nn \l_sCID_NFSS_names_prop 
                                          {\prop_item:Nn \l_tmpa_prop {NFSS~names}}
-   \exp_args:NNx\prop_put_if_new:Nnn \l_sCID_font_names_prop {\l_sCID_default_minfont_tl}  {min}
-   \exp_args:NNx\prop_put_if_new:Nnn \l_sCID_font_names_prop {\l_sCID_default_gothfont_tl} {goth}
+   \exp_args:NNnx\prop_put_if_new:Nnn \l_sCID_font_names_prop {min} {\l_sCID_default_minfont_tl}
+   \exp_args:NNnx\prop_put_if_new:Nnn \l_sCID_font_names_prop {goth} {\l_sCID_default_gothfont_tl}
    \prop_put_if_new:Nnn \l_sCID_NFSS_names_prop {JY1/mc/m/n}  {min}
    \prop_put_if_new:Nnn \l_sCID_NFSS_names_prop {JY1/gt/m/n}  {goth}
    \prop_put_if_new:Nnn \l_sCID_NFSS_names_prop {JY1/mc/bx/n} {goth}
-%%% l_font_names_prop : actual name of fonts -> ID
+%%% l_font_names_prop : ID -> actual name of fonts
 %%% l_NFSS_names_prop : NFSS name of fonts   -> ID
    \prop_map_inline:Nn \l_sCID_NFSS_names_prop {
       \regex_split:nnN{/}{##1} \l_sCID_NFSS_seq
@@ -92,7 +92,7 @@
                       \int_use:N\c_sys_minute_int) ^^J
                    } 
    \prop_map_inline:Nn \l_sCID_font_names_prop {
-      \iow_now:Nn #1 {scid##2-raw~Identity-H~##1}
+      \iow_now:Nn #1 {scid##1-raw~Identity-H~##2}
       } 
    \iow_close:N #1
 }
