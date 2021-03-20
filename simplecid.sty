@@ -1,6 +1,6 @@
 \NeedsTeXFormat{pLaTeX2e}
 \RequirePackage{expl3}
-\ProvidesExplPackage{simplecid}{2021/03/01}{0.1}{using CID for output letter}
+\ProvidesExplPackage{simplecid}{2021/03/01}{0.1}{using CID for outputing letter}
 
 \RequirePackage{xkeyval}
 \RequirePackage{pxatbegshi}
@@ -62,8 +62,9 @@
    \bool_if:NT \l_generate_mapfile_bool
       {\sCID_generate_map:N \l_mapfile_sCID_iow}
    \bool_if:NT \l_embed_mapfile_bool
-      {\AtBeginDocument{\special{pdf:mapfile~\tl_use:N \l_mapfilename_sCID}}
-       \AtBeginShipout{\special{pdf:mapfile~\tl_use:N \l_mapfilename_sCID}}
+      {\AtBeginShipout{\setbox\AtBeginShipoutBox=\vbox{%
+      \baselineskip\z@skip\lineskip\z@skip\lineskiplimit\z@
+      \special{pdf:mapfile~\tl_use:N \l_mapfilename_sCID}\copy\AtBeginShipoutBox}}
       }
 }
 
@@ -135,8 +136,8 @@
     \sCID{\prop_item:Nn \g_scid_symlist_prop {#1}}
 }
 
-\cs_new:Npn \sCIDMaru #1{\sCIDSym{丸#1}}
+\cs_new:Npn \sCIDMaru      #1{\sCIDSym{丸#1}}
 \cs_new:Npn \sCIDNizyuMaru #1{\sCIDSym{丸丸#1}}
-\cs_new:Npn \sCIDKuroMaru #1{\sCIDSym{黒丸#1}}
+\cs_new:Npn \sCIDKuroMaru  #1{\sCIDSym{黒丸#1}}
 
 \endinput
