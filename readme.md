@@ -1,0 +1,72 @@
+# simplcidパッケージ
+
+(u)pLaTeX2eにおいては，AdobeJapan1-7の文字セットにアクセスする手段としてotfパッケージが事実上の標準です．しかし，otfパッケージは，norepalceオプションを有効にしなければ，クラスファイルで指定されたjfmファイルをotfパッケージ独自のものを使って組版するという特徴があります．実際のところはotfパッケージが提供するjfmファイルの方がいろいろと都合がよいのですが，商業的な組版においてはotfパッケージを不用意に追加してしまうと想定していない結果となります．
+
+また，otfパッケージにはAdobeJapan1-7の文字を多書体で使用できるdeluxeオプションも存在しますが，多書体を想定して作成されてはいるがotfパッケージを考慮していない既存のクラスファイルと組み合わせるのはそう簡単なことではありません．
+
+さらに，deluxeオプションが想定している書体数よりも多くの書体でAdobeJapan1-7の文字が要求される状況下ではotfパッケージをそのまま使うことはできません．このような場合otfパッケージに付随するtfmファイルやvfファイルと同等なものを構成して，otfパッケージの内容を拡張するのが正当な解決法なのでしょうが，otfパッケージそのものの性能の高さがそのような模倣をとても難しいものとしています．
+
+そもそもクラスファイル作成時にotfパッケージを使用するか否かを考慮して，使用するならばotfパッケージをクラスファイル内で読み込んでそれを前提としてクラスファイルを作るべきだと考えています．あとからotfパッケージを読み込むことはリスクが大きいです．しかし，人名などでどうしてもあとから文字が必要になる場合や丸数字などが必要になる場合や，見出しなどで目立つ書体で必要になることが往々にしてあります．
+
+旧来は文字を画像として作成してそれを貼りこむという「読めればよい」レベルでの解決がなされてきましたが，そもそもその文字を収録しているフォントが存在するのに画像にするのは本末転倒です．そこで，たくさんの書体でのJIS0208に存在しない文字の要求やotfパッケージを想定していない状況でのJIS0208範囲外の文字の要求を解決するための手段として，以下の条件を満たす「simplecidパッケージ」を公開します．
+
+- CIDで文字を指定できる，otfパッケージの\CIDに相当する，\sCIDを提供する
+    - 周囲の書体と文字サイズに追随させる（クラスファイルの設定によるがたいていの場合は問題ない）
+    - クラスファイルで指定されているjfmを置き換えない（本パッケージマクロの読み込みの有無だけでは組版結果が変わらない）
+- 本文の明朝体・ゴシック体に加えて20書体までの多書体化に対応（多少の変更で追加可能）
+
+## 動作環境
+
+- pLaTeX2e（TeXLive2017 frozen or later）（upLaTeX2eは非対応）
+- dvipdfmx
+
+simplecidパッケージの実装にはexpl3を用いています．実装で用いられているexpl3の機能で一番新しいものはregexモジュールの`\regex_replace_all:nnN`です．また，付随するjfm/vfはJIS符号化に依存しますので，simplecidパッケージは2017年以降のexpl3が動作するバージョンのpLaTeX2e専用です．upLaTeX2eでは動作しません．JISではなくutf8に沿うようなtfm/vfファイルを作成すればupLaTeX2eに対応するできるとは思いますが，それは今後の課題とします．
+
+現状ではドライバはdvipdfmxのみに対応してます．多少の手作業でmapファイルを書き換えて，パッケージオプションを適切にすればdvipsでも動作はするはずですがテストはしていません
+
+## ファイルの構成
+
+simplecidパッケージは以下のファイルからなります．
+
+    simplecid.sty：パッケージの本体
+    scid-prop.dat：CIDへのエイリアスを定めるproperty list
+    tfm --- scidmin-00.tfm--scidmin-03.tfm
+            scidgoth-00.tfm--scidgoth-03.tfm
+            scid00-01.tfm--scid00-03.tfm 
+            scid01-01.tfm--scid01-03.tfm
+            ...
+            scid19-01.tfm--scid19-03.tfm     ：組版に用いるtfmファイル群（88ファイル）
+            scidmin-raw.tfm, scidgoth-raw.tfm
+            scid00-raw.tfm～scid19-raw.tfm   ：vfから呼ばれるファイルtfm群（22ファイル）
+    vf  --- scidmin-00.vf--scidmin-03.vf
+            scidgoth-00.vf--scidgoth-03.vf
+            scid00-01.vf--scid00-03.vf 
+            scid01-01.vf--scid01-03.vf
+            ...
+            scid19-01.vf--scid19-03.vf       ：vfファイル群（88ファイル）
+
+
+## \usepakageの書式
+
+    \usepackage[<options>]{simplecid}
+       <options>     := <option>*
+       <option>      := <generateMap>|<embedMap>|<mapname>
+       <generateMap> := generateMap(\s*=\s*(<true>|<false>))?
+       <embdeMap>    := embedMap(\s*=\s*(<true>|<false>))?
+       <mapname>     := mapname(\s*=\s*<mapfile>)?
+
+       <true>        := true 
+       <false>       := false 
+       <mapfile>     := 任意のファイル名
+
+
+`\usepackage`に与えることのできるオプションは<key>=<val>形式です．
+
+- generateMap 
+  generateMap=trueではsimplecidパッケージが必要とするmapファイルを自動生成します．generateMap=falseの場合は生成しません．値を省略してgenerateMapだけとした場合はtrueが指定されたとみなされます．デフォルトはgenerateMap=trueです．
+- embedMap 
+  embedeMap=trueではsimplecidパッケージが必要とするmapファイルをdviファイルに埋め込みます．embedMap=falseの場合は埋め込みません．値を省略してembedMapだけとした場合はtrueが指定されたとみなされます．埋め込まれるmapファイルのファイル名はmapnameオプションで指定されるものです．デフォルトはembedMap=trueです．
+- mapfile
+  simplecidパッケージが生成する（そして埋め込むことを指定できる）mapファイルのファイル名を指定します．`mapfile=hoge.map`で，`generateMap=true`の場合にhoge.mapが生成され，`embedMap=true`の場合にhoge.mapが埋め込まれます．ファイル名を指定しなかった場合は，scidfonts-<driver>.mapとなります．実質的にscidfonts-dvipdfmx.mapです．
+
+  
