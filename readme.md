@@ -26,6 +26,9 @@ simplecidパッケージの実装にはexpl3を用いています．実装で用
 
 また，otfパッケージと同様にAJ1であるCIDフォントを想定しています．AI0であるフォントは考慮していません．
 
+## 組方向について
+
+横組専用です．縦組は考慮していません．tfmファイルやvfファイルを構築して，`simplecid.sty`内部のJT1エンコーディングに関連する部分を整備すれば対応可能だと思われますが，現時点では縦組に拡張する予定はありません．
 
 ## ファイルの構成とインストール
 
@@ -74,7 +77,7 @@ simplecidパッケージは以下のファイルからなります．
 - mapfile
   simplecidパッケージが生成する（そして埋め込むことを指定できる）mapファイルのファイル名を指定します．`mapfile=hoge.map`で，`generateMap=true`の場合にhoge.mapが生成され，`embedMap=true`の場合に`hoge.map`が埋め込まれます．ファイル名を指定しなかった場合は，`scidfonts-`<driver>`.map`となります．実際のところは`scidfonts-dvipdfmx.map`になります．
 
-## 提供されるコマンド
+## コマンド
 
 ### `\sCID`
 
@@ -97,41 +100,83 @@ simplecidパッケージは以下のファイルからなります．
 - 黒丸角（角丸の黒四角に数字や文字）
 - ()（カッコつきの数字や文字）
 
-具体的には`\sCIDsym{丸上}`とすれば「○の中に上」の文字を表しますし，`\sCIDSym{(9)}`は「(9)の組文字」です．otfパッケージに付随する`ajmacros.sty`では数字で指定していましたが，それを「文字」で指定するようにしています．使用される書体やサイズはそこで指定されているものになります．どのような記号が使えるかはAdobeJapan1-7の文字一覧を参照してください．
+具体的には`\sCIDs‘‘m{丸上}`とすれば「○の中に上」の文字を表しますし，`\sCIDSym{(9)}`は「(9)の組文字」です．otfパッケージに付随する`ajmacros.sty`では数字で指定していましたが，それを「文字」で指定するようにしています．使用される書体やサイズはそこで指定されているものになります．どのような記号が使えるかはAdobeJapan1-7の文字一覧を参照してください．
 
-### `\sCIDSym`の別名
+頻繁に使われる記号や，漢字の異体字でよく使われれる，いわゆる「梯子高」「立崎」のような文字へのショートカットは現状では用意していません．
+
+#### `\sCIDSym`の別名
 
 `\sCIDsym`には以下のような別名を用意しています．
 
-#### `\sCIDMaru`
+##### `\sCIDMaru`
 
 `\sCIDMaru{<hoge>}`は`\sCIDSym{丸<hoge>}`です．
 
-#### `\sCIDNizyuMaru`
+##### `\sCIDNizyuMaru`
 
 `\sCIDNizyuMaru{<hoge>}`は`\sCIDSym{丸丸<hoge>}`です．
 
-#### `\sCIDKuroMaru`
+##### `\sCIDKuroMaru`
 
 `\sCIDKuroMaru{<hoge>}`は`\sCIDSym{黒丸<hoge>}`です．
 
-#### `\sCIDKuroKaku`
+##### `\sCIDKuroKaku`
 
 `\sCIDKuroKaku{<hoge>}`は`\sCIDSym{黒角<hoge>}`です．
 
-#### `\sCIDKaku`
+##### `\sCIDKaku`
 
 `\sCIDKaku{<hoge>}`は`\sCIDSym{角<hoge>}`です．
 
-#### `\sCIDMaruKaku`
+##### `\sCIDMaruKaku`
 
 `\sCIDMaruKaku{<hoge>}`は`\sCIDSym{丸角<hoge>}`です．
 
-#### `\sCIDKuroMaruKaku`
+##### `\sCIDKuroMaruKaku`
 
 `\sCIDKuroMarukaku{<hoge>}`は`\sCIDSym{黒丸角<hoge>}`です．
 
-#### `\sCIDKakko`
+##### `\sCIDKakko`
 
 `\sCIDKakko{<hoge>}`は`\sCIDSym{(<hoge>)}`です．
 
+### `\sCIDSetting`
+
+    標準で割り当てられている書体や多書体化した場合への対処のための設定を`\sCIDSetting`で行います．`\sCIDSetting`は一つの文書ではプリアンブル内で一回のみ使えます．詳細は「デフォルトのフォントと多書体化」の項目で説明します．
+
+## デフォルトのフォントと多書体化
+
+### デフォルトのフォント
+
+simplecidパッケージはデフォルトでは，明朝体はHaranoAjiMincho-Regular.otf，ゴシック体はHaranoAjiGothic-Medium.otfとしています．これはTeXLive2020のデフォルトと同じです．
+
+これを昔のデフォルトである，明朝体はRyumin-Light，ゴシック体はGothicBBB-Mediumに変更するには，
+
+    \sCIDSetting{font names => {min  -> A-OTF-RyuminPro-Light.otf,
+                                goth -> A-OTF-GothicBBBPro-Medium.otf,
+                               },
+                }
+
+もしくは
+
+    \sCIDSetting{font names => {min  -> A-OTF-RyuminPro-Light.otf,
+                                goth -> A-OTF-GothicBBBPro-Medium.otf,
+                               },
+                 NFSS names => {JY1//mc/m/n -> min,
+                                JY1/gt/m/n  -> goth,
+                                JY1/mc/bx/n -> goth,
+                                JY1/mc/b/n  -> goth,
+                                },
+                }
+
+とします．`\sCIDSetting`の引数は連想配列の形式です．キーは「font names」と「NFSS names」の二つであり，それぞれのキーの値もまた連想配列です．
+
+font namesキーの値である連想配列では，キーはmin，goth，0～19の数字の22通りです．これらをIDと呼ぶことにします．min，gothがそれぞれ明朝体，ゴシック体を表します．各IDには実際のフォント名を対応付けます．上の例では，minにはA-OTF-RyuminPro-Light.otfを，gothにはA-OTF-GothicBBBPro-Medium.otfを割り当てています．
+
+NFSS namesキーの値である連想配列では，キーはNFSSでのフォント名で，値は上述のIDです．ここではJY1/mc/m/nにminを，JY1/gt/m/n，JY1/mc/bx/nにgothを割り当てています．font namesと合わせることで，JY1/mc/m/nにはA-OTF-RyuminPro-Light.otfが，JY1/gt/m/n，JY1/mc/bx/nにはA-OTF-GothicBBBPro-Medium.otfが対応付けられます．
+
+このような対応によって，標準の明朝体がRyumin-Lightであり，ゴシック体がGothicBBB-Mediumである場合に，明朝体（JY1/mc/m/n）のところで`\sCID`などを用いた場合はA-OTF-RyuminPro-Light.otfが，ゴシック体（JY1/gt/m/n，JY1/mc/bx/n，JY1/mc/b/n）のところではA-OTF-GothicBBBPro-Medium.otfで出力されます．
+
+### `\sCIDSetting`の連想配列（っぽいもの）
+
+`\sCIDSetting`の引数は連想配列を値として持つ連想配列です．ここではキーと値のペアで構成されるデータ構造を，他の言語の用語を援用して，「連想配列」といっているだけであり，実体はexpl3のproperty listです．expl3のproperty listではキーと値を結びつけるためには「`=`」を用います．ここでは正規表現`/([-=]+\s*)+>/`によって`\sCIDSetting`では「`=`」だけではなく「`=>`」「`->`」なども使えるようにしています．また，expl3のproperty listでは「値」としてproperty listは許されていませんが，引数をデータ構造としてのproperty listに変換するタイミングをごかますことで値がproperty listであるproperty listに見えるようにしています．これらは可読性を少しでもあげるための細工です．リストの最後の項目の末尾に「`,`」を残しているのも可読性や入れ替えやコピーを簡単にするためです．
