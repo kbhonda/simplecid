@@ -142,15 +142,16 @@ simplecidパッケージは以下のファイルからなります．
 
 ### `\sCIDSetting`
 
-    標準で割り当てられている書体や多書体化した場合への対処のための設定を`\sCIDSetting`で行います．`\sCIDSetting`は一つの文書ではプリアンブル内で一回のみ使えます．詳細は「デフォルトのフォントと多書体化」の項目で説明します．
+標準で割り当てられている書体や多書体化した場合への対処のための設定を`\sCIDSetting`で行います．`\sCIDSetting`は一つの文書ではプリアンブル内で一回のみ使えます．詳細は「デフォルトのフォントと多書体化」の項目で説明します．
 
 ## デフォルトのフォントと多書体化
 
-### デフォルトのフォント
+### デフォルトのフォント（明朝とゴシック）
 
-simplecidパッケージはデフォルトでは，明朝体はHaranoAjiMincho-Regular.otf，ゴシック体はHaranoAjiGothic-Medium.otfとしています．これはTeXLive2020のデフォルトと同じです．
+simplecidパッケージのデフォルトは，TeXLive2020のデフォルトと同じく，明朝体はHaranoAjiMincho-Regular.otf，ゴシック体はHaranoAjiGothic-Medium.otfです．
 
-これを昔のデフォルトである，明朝体はRyumin-Light，ゴシック体はGothicBBB-Mediumに変更するには，
+
+これを以前のデフォルトである，明朝体はRyumin-Light，ゴシック体はGothicBBB-Mediumに変更するには，
 
     \sCIDSetting{font names => {min  -> A-OTF-RyuminPro-Light.otf,
                                 goth -> A-OTF-GothicBBBPro-Medium.otf,
@@ -171,12 +172,76 @@ simplecidパッケージはデフォルトでは，明朝体はHaranoAjiMincho-R
 
 とします．`\sCIDSetting`の引数は連想配列の形式です．キーは「font names」と「NFSS names」の二つであり，それぞれのキーの値もまた連想配列です．
 
-font namesキーの値である連想配列では，キーはmin，goth，0～19の数字の22通りです．これらをIDと呼ぶことにします．min，gothがそれぞれ明朝体，ゴシック体を表します．各IDには実際のフォント名を対応付けます．上の例では，minにはA-OTF-RyuminPro-Light.otfを，gothにはA-OTF-GothicBBBPro-Medium.otfを割り当てています．
+font namesキーの値である連想配列では，キーはmin，goth，00～09，10～19の合計22通りです．これらをIDと呼ぶことにします．min，gothがそれぞれ明朝体，ゴシック体を表します．各IDには実際のフォント名を対応付けます．上の例では，minにはA-OTF-RyuminPro-Light.otfを，gothにはA-OTF-GothicBBBPro-Medium.otfを割り当てています．
 
 NFSS namesキーの値である連想配列では，キーはNFSSでのフォント名で，値は上述のIDです．ここではJY1/mc/m/nにminを，JY1/gt/m/n，JY1/mc/bx/nにgothを割り当てています．font namesと合わせることで，JY1/mc/m/nにはA-OTF-RyuminPro-Light.otfが，JY1/gt/m/n，JY1/mc/bx/nにはA-OTF-GothicBBBPro-Medium.otfが対応付けられます．
 
 このような対応によって，標準の明朝体がRyumin-Lightであり，ゴシック体がGothicBBB-Mediumである場合に，明朝体（JY1/mc/m/n）のところで`\sCID`などを用いた場合はA-OTF-RyuminPro-Light.otfが，ゴシック体（JY1/gt/m/n，JY1/mc/bx/n，JY1/mc/b/n）のところではA-OTF-GothicBBBPro-Medium.otfで出力されます．
 
+font namesキー，NFSS namesキーは必須ではありません．font namesキーが省略された場合は，
+
+    font names => {min  -> A-OTF-RyuminPro-Light.otf,
+                  goth -> A-OTF-GothicBBBPro-Medium.otf,
+                  },
+
+が，NFSS namesキーが省略された場合は，
+
+    NFSS names => {JY1//mc/m/n -> min,
+                   JY1/gt/m/n  -> goth,
+                   JY1/mc/bx/n -> goth,
+                   JY1/mc/b/n  -> goth,
+                  },
+
+が指定されたことになり，これらは特に上書きされない限り常に設定されます．
+
+
 ### `\sCIDSetting`の連想配列（っぽいもの）
 
-`\sCIDSetting`の引数は連想配列を値として持つ連想配列です．ここではキーと値のペアで構成されるデータ構造を，他の言語の用語を援用して，「連想配列」といっているだけであり，実体はexpl3のproperty listです．expl3のproperty listではキーと値を結びつけるためには「`=`」を用います．ここでは正規表現`/([-=]+\s*)+>/`によって`\sCIDSetting`では「`=`」だけではなく「`=>`」「`->`」なども使えるようにしています．また，expl3のproperty listでは「値」としてproperty listは許されていませんが，引数をデータ構造としてのproperty listに変換するタイミングをごかますことで値がproperty listであるproperty listに見えるようにしています．これらは可読性を少しでもあげるための細工です．リストの最後の項目の末尾に「`,`」を残しているのも可読性や入れ替えやコピーを簡単にするためです．
+`\sCIDSetting`の引数は連想配列を値として持つ連想配列です．ここではキーと値のペアで構成されるデータ構造を，他の言語の用語を援用して，「連想配列」といっているだけであり，実体はexpl3のproperty listです．expl3のproperty listではキーと値を結びつけるためには「`=`」を用います．ここでは正規表現`/([-=]+\s*)+>/`によって`\sCIDSetting`では「`=`」だけではなく「`=>`」「`->`」なども使えるようにしています．また，expl3のproperty listでは「値」としてproperty listは許されていませんが，引数をデータ構造としてのproperty listに変換するタイミングをごかますことで値がproperty listであるproperty listに見えるようにしています．これらは可読性を少しでもあげるための細工です．リストの最後の項目の末尾に「`,`」を残しているのも可読性，入れ替えやコピーを簡単にするためであって，とくに必要なものではありません．
+
+### 多書体化
+
+NFSS2の枠組みに従った多書体の設定が組み込まれている場合，その情報を`\sCIDSetting`に与えることでその書体の文字や記号を出力できます．ここではTeXLive2020に収録されている`morisawa.sty`（2018/03/06 okumura, texjporg）を読み込んだケースで説明します．ここではいわゆる「モリサワの基本五書体」がdvipdfmxで埋め込める状態になっていることを前提とします．
+
+`morisawa.sty`のフォントの定義の本質的な部分は以下の通りです（ここでは横組部分のみを挙げます）．
+
+    \DeclareFontShape{JY1}{rml}{m}{n}{<-> s * [0.961] Ryumin-Light-J}{}
+    \DeclareFontShape{JY1}{rml}{bx}{n}{<-> s * [0.961] GothicBBB-Medium-J}{}
+
+    \DeclareFontShape{JY1}{fma}{m}{n}{<-> s * [0.961] FutoMinA101-Bold-J}{}
+    \DeclareFontShape{JY1}{fma}{bx}{n}{<-> s * [0.961] GothicBBB-Medium-J}{}
+
+    \DeclareFontShape{JY1}{gbm}{m}{n}{<-> s * [0.961] GothicBBB-Medium-J}{}
+    \DeclareFontShape{JY1}{gbm}{bx}{n}{<-> s * [0.961] FutoGoB101-Bold-J}{}
+
+    \DeclareFontShape{JY1}{jun}{m}{n}{<-> s * [0.961] Jun101-Light-J}{}
+    \DeclareFontShape{JY1}{jun}{bx}{n}{<->ssub*jun/m/n}{}
+
+この設定の下で，明朝体のデフォルトをrmlに，ゴシック体をgbmに変更します．さらにmg（medium gothic？）にjunを割りあて，フォント変更マクロを定義するのが`morisawa.sty`です．
+
+この状態に，simplecidパッケージを合わせるための設定は
+
+    \sCIDSetting{font names => {00 -> A-OTF-RyuminPro-Light.otf,
+                                01 -> A-OTF-GothicBBBPro-Medium.otf,
+                                02 -> A-OTF-FutoMinA101Pro-Bold.otf,   
+                                03 -> A-OTF-FutoGoB101Pro-Bold.otf,
+                                04 -> A-OTF-Jun101Pro-Bold.otf,
+                               },
+                 NFSS names => {JY1/rml/m/n  -> 00,
+                                JY1/rml/bx/n -> 01,
+                                JY1/fma/m/n  -> 02,
+                                JY1/fma/bx/n -> 01,
+                                JY1/gbm/m/n  -> 01,
+                                JY1/gbm/bx/n -> 03,
+                                JY1/jun/m/n  -> 04,
+                                JY1/jun/bx/n -> 04,
+                               },
+                }
+
+となります．`morisawa.sty`はpLaTeX2e標準の設定は変更せず別の設定に切り替えるという仕様であるので，`\sCIDSetting`もそのようにしてみました．この状態の下，たとえば
+
+    \textbf{中ゴシック\sCIDMaru{1}}
+
+    \textmg{じゅん\sCIDMaru{1}}
+
+とすれば，丸数字はそれぞれの書体でそのときのサイズのものが出力されます．
