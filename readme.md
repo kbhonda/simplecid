@@ -58,10 +58,11 @@ simplecidパッケージは以下のファイルからなります．
 
     \usepackage[<options>]{simplecid}
        <options>     := <option>*
-       <option>      := <generateMap>|<embedMap>|<mapname>
+       <option>      := <generateMap>|<embedMap>|<mapname>|<scale>
        <generateMap> := generateMap(\s*=\s*(<true>|<false>))?
        <embdeMap>    := embedMap(\s*=\s*(<true>|<false>))?
        <mapname>     := mapname(\s*=\s*<mapfile>)?
+       <scale>       := scale(\s*=\s*([1-9][0-9]+)?(\.[0-9]+))
 
        <true>        := true 
        <false>       := false 
@@ -76,6 +77,8 @@ simplecidパッケージは以下のファイルからなります．
   `embedeMap=true`ではsimplecidパッケージが必要とするmapファイル名をdviファイルに埋め込みます．`embedMap=false`の場合は埋め込みません．値を省略してembedMapだけとした場合はtrueが指定されたとみなされます．埋め込まれるmapファイルのファイル名はmapnameオプションで指定されるものです．デフォルトは`embedMap=true`です．
 - mapfile
   simplecidパッケージが生成する（そして埋め込むことを指定できる）mapファイルのファイル名を指定します．`mapfile=hoge.map`で，`generateMap=true`の場合にhoge.mapが生成され，`embedMap=true`の場合に`hoge.map`が埋め込まれます．ファイル名を指定しなかった場合は，`scidfonts-`<driver>`.map`となります．実際のところは`scidfonts-dvipdfmx.map`になります．
+- scale
+  simplecidパッケージが出力する文字や記号の大きさを表す比率です．10ptの欧文に対してscaleの値を10倍にした大きさの文字を出力します．このオプションはクラスファイルで与えられる`\Cjascale`の値が何らかの事情で実際の和文サイズを表さない場合にのみ使用して下さい．また`\Cjascale`が未定義の場合はpTeXの標準にあわせて10ptの欧文に対して，9.62216ptとなるようにしていますが，このときの0.962216という比率が不正な場合もこのオプションで正しいものに修正してください．
 
 ## コマンド
 
@@ -272,8 +275,7 @@ IDと実フォント，NFSS名とIDの対応がこのパッケージを使うう
 `simplecid.sty`に記述されているマクロに関しては，expl3であること以外には複雑なことはしていません．しかしtfmとvfの構造はブラックボックスになっているので，それに関して記述しておきます．
 
 
+simplecidパッケージのtfmは正確にはjfmであり10ptの正方形で，高さと深さの比は880:120，つまりメトリックとしてはotfパッケージと同じです．ただし，すべての文字を`CHARSINTYPE 0`にしています．glue/kernも一切設定していません．単純に並べることだけを想定しています．また，`\Cjascale`が未定義なときはpTeXの標準にあわせて0.962216にしており，10ptベースなのでこの値が直接`\DeclareFontShape`のスケールファクタになります．jsclassesのように10pt欧文に13Qを割り当てる状況下では`\Cjascale`が0.92469と定められていることを前提としています．この前提が崩れている場合や，`\Cjascale`が定義されているのにもかかわらず，パッケージで比率が変更されるケースでは比率を注意する必要があります．これは例えば，`jarticle.cls`のようなjclassesのもとで，TeXLive2020のmorisawaパッケージを用いた場合に顕わになります．cls側で`\Cjascale`を0.962216にしているにもかかわらず，morisawaパッケージが`\Cjascale`が0.92469であるときのスケールファクタを用いているからです（実際のところはmorisawaパッケージはjscalssesのもとでの使用が前提なのでしょう）．このような混乱に対処するために，otfパッケージが導入しているように，simplecidパッケージのscaleオプションでパッケージ内でのみ有効となるスケールファクタを導入しています．
 
-
-
-
+さて，pTeXのjfmはJISがベースです．JISは1面が94区94点の8836（=94 * 94）文字から構成されています．一方，CIDはおおざっぱに約28000文字です．したがって，四つのjfmがあればCIDの文字数は確保できます．
 
