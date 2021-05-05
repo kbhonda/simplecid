@@ -5,6 +5,9 @@
 \RequirePackage{xkeyval}
 \RequirePackage{pxatbegshi}
 
+\cs_if_exist:NTF \Cjascale {\tl_set:Nn \l_sCID_scale {\Cjascale}} {\tl_set:Nn \l_sCID_scale {0.962216}}%%
+
+
 \bool_new:N \l_generate_mapfile_bool
 \DeclareOptionX{generateMap}[true]{\use:c{bool_set_#1:N} \l_generate_mapfile_bool}
 
@@ -13,13 +16,12 @@
 
 \DeclareOptionX{mapname}[scidfonts-\c_sys_backend_str.map]{\tl_set:Nx \l_mapfilename_sCID {#1}}
 
-
+\DeclareOptionX{scale}{\tl_set:Nn \l_sCID_scale {#1}}
 
 \ExecuteOptionsX{generateMap,embedMap,mapname}
 \ProcessOptionsX
 
 \iow_new:N \l_mapfile_sCID_iow
-\cs_if_exist:NTF \Cjascale {} {\def\Cjascale{0.962216}}%%
 \int_const:Nn \l_sCID_subtfm_int {4}
 
 
@@ -51,7 +53,7 @@
                              {\seq_item:Nn \l_sCID_NFSS_seq {2}}
                              {\seq_item:Nn \l_sCID_NFSS_seq {3}}
                              {\seq_item:Nn \l_sCID_NFSS_seq {4}\two@digits{####1}}
-                             {<-> s*[\Cjascale] scid\tl_use:c{l_sCID_##1_tl}-\two@digits{####1}}{}
+                             {<-> s*[\l_sCID_scale] scid\tl_use:c{l_sCID_##1_tl}-\two@digits{####1}}{}
             \DeclareFontShape{JT1}
                              {\seq_item:Nn \l_sCID_NFSS_seq {2}}
                              {\seq_item:Nn \l_sCID_NFSS_seq {3}}
