@@ -106,8 +106,10 @@
                       \int_use:N\c_sys_minute_int) ^^J
                    } 
    \prop_map_inline:Nn \l_sCID_font_names_prop {
-      \tl_set:Nn \l_tmpa_tl {\two@digits {##1}}
-      \iow_now:Nn #1 {scid##1-raw~Identity-H~##2}
+      \str_if_in:nnTF { mingoth } { ##1 }
+         {\str_set:Nx \l_tmpa_str { ##1 } }
+         {\str_set:Nx \l_tmpa_str {\two@digits {##1} } }
+      \iow_now:Nx #1 {scid\l_tmpa_str -raw~Identity-H~##2}
       } 
    \iow_close:N #1
 }
