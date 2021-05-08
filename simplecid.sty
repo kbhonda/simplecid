@@ -137,7 +137,8 @@
    \cs_if_exist:cTF{\k@encoding/\k@family/\k@series/\k@shape\two@digits{\l_sCID_n_int}}
                    {\kanjishape{\k@shape\two@digits{\l_sCID_n_int}}\selectfont}
                    {\msg_error:nnn{sCID}{unsetted~font}{simplecid}}
-   \char\jis\int_eval:n{(\l_sCID_ku_int + 32) * 256 + (\l_sCID_ten_int + 32)}
+   %\char\jis\int_eval:n{(\l_sCID_ku_int + 32) * 256 + (\l_sCID_ten_int + 32)}
+   \char\kuten\int_eval:n{\l_sCID_ku_int * 256 + \l_sCID_ten_int}
 \group_end:
 \kern-1zw\char\jis"2121\relax%% guard by jghost end
 }
