@@ -29,6 +29,14 @@
 \tl_set:Nn \l_sCID_default_minfont_tl  {HaranoAjiMincho-Regular.otf}
 \tl_set:Nn \l_sCID_default_gothfont_tl {HaranoAjiGothic-Medium.otf}
 
+
+\cs_new:Nn \sCID_tfm_suffix:NnN {
+   \tl_set:Nn \l_tmpa_tl {\prop_item:Nn #1 {#2} }
+   \exp_args:Nnx\tl_if_in:nnTF {mingoth} {\l_tmpa_tl} 
+   {\tl_set:Nx #3 {\l_tmpa_tl}}
+   {\tl_set:Nx #3 {\two@digits {\l_tmpa_tl}}}
+}
+
 \cs_new:Npn \sCIDSetting #1{
    \tl_set:Nn \l_tmpa_tl {#1} 
    \regex_replace_all:nnN {  ([-=]+\s*)+>  } {=} \l_tmpa_tl
@@ -47,7 +55,9 @@
 %%% l_NFSS_names_prop : NFSS name of fonts   -> ID
    \prop_map_inline:Nn \l_sCID_NFSS_names_prop {
       \regex_split:nnN{/}{##1} \l_sCID_NFSS_seq
-      \tl_set:cx {l_sCID_##1_tl} { \prop_item:Nn \l_sCID_NFSS_names_prop {##1} }%
+      %\tl_set:cx {l_sCID_##1_tl} { \prop_item:Nn \l_sCID_NFSS_names_prop {##1} }%
+      \sCID_tfm_suffix:NnN \l_sCID_NFSS_names_prop {##1} \l_tmpa_tl
+      \tl_set:cx {l_sCID_##1_tl} { \l_tmpa_tl }%
       \int_step_inline:nnn{0}{\int_eval:n {\l_sCID_subtfm_int - 1} }{
             \DeclareFontShape{\seq_item:Nn \l_sCID_NFSS_seq {1}}
                              {\seq_item:Nn \l_sCID_NFSS_seq {2}}
@@ -96,6 +106,7 @@
                       \int_use:N\c_sys_minute_int) ^^J
                    } 
    \prop_map_inline:Nn \l_sCID_font_names_prop {
+      \tl_set:Nn \l_tmpa_tl {\two@digits {##1}}
       \iow_now:Nn #1 {scid##1-raw~Identity-H~##2}
       } 
    \iow_close:N #1
