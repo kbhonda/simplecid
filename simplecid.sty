@@ -1,12 +1,15 @@
 \NeedsTeXFormat{pLaTeX2e}
 \RequirePackage{expl3}
-\ProvidesExplPackage{simplecid}{2021/05/03}{1.0beta}{using CID for outputing letter}
+\ProvidesExplPackage{simplecid}{2021/05/12}{1.0beta2}{using CID for outputing letter}
 
 \RequirePackage{xkeyval}
 \RequirePackage{pxatbegshi}
 
 \cs_if_exist:NTF \Cjascale {\tl_set:Nn \l_sCID_scale {\Cjascale}} {\tl_set:Nn \l_sCID_scale {0.962216}}%%
 
+\DeclareOption{dvipdfmx}{\str_if_exist:NnF \c_sys_backend_str 
+                                           {\str_gset:Nn \c_sys_backend_str {dvipdfmx}}
+                        }
 
 \bool_new:N \l_generate_mapfile_bool
 \DeclareOptionX{generateMap}[true]{\use:c{bool_set_#1:N} \l_generate_mapfile_bool}
@@ -18,6 +21,8 @@
 
 \DeclareOptionX{scale}{\tl_set:Nn \l_sCID_scale {#1}}
 
+\ExecuteOptions{dvipdfmx}
+\ProcessOptions
 \ExecuteOptionsX{generateMap,embedMap,mapname}
 \ProcessOptionsX
 
