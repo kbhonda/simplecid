@@ -1,44 +1,23 @@
-\documentclass{jarticle}
+\documentclass[dvipdfmx]{jarticle}
 
 
 \usepackage{simplecid}
 
-\AtBeginDocument{%
-\special{pdf:mapline scid00-raw Identity-H A-OTF-RyuminPro-Light.otf}
-\special{pdf:mapline scid01-raw Identity-H A-OTF-GothicBBBPro-Medium.otf}
+
+\ExplSyntaxOn
+\makeatletter
+\def\setX#1#2{
+\@namedef{#1List}{\int_step_inline:nnn {0}{#2}  {\use:c {sCID#1}{####1}}}
 }
+\setX{Maru}{100}\setX{KuroMaru}{100}
+\setX{Kaku}{100}\setX{KuroKaku}{100}
+\setX{KuroMaruKaku}{100}
+\ExplSyntaxOff
 
-\sCIDSetting{0}{JY1/mc/m/n}{A-OTF-RyuminPro-Light.otf}
-\sCIDSetting{1}{JY1/gt/m/n}{A-OTF-GothicBBBPro-Medium.otf}
-\sCIDSetting{1}{JY1/mc/bx/n}{A-OTF-GothicBBBPro-Medium.otf}
-
-
-\begin{document}
-
-
-
-あ\sCID{5421}\sCID{14400}\sCID{14410}
-
-\textbf{あ\sCID{5421}\sCID{14400}\sCID{14410}}
-
-
+\begin{document}\parindent0pt
+\MaruList\par
+\KuroMaruList\par
+\KakuList\par
+\KuroKakuList\par
+%\KuroMaruKakuList\par
 \end{document}
-
-
-CIDを入力
-
-これを8836（94*94）ごとに区切る
-1--8836，8837--17672(=8836*2)，...
-
-順番に0群，1群，...とする
-入力されたCID番号をcid，
-その番号がn群のp番とすると
-cid -1 = n * 8836 + R (0<=R<8836)
-p = R+1 
-
-1<=p<=8836
-
-R = (ku-1) * 94 + (ten-1) 0<=ten<94
-
-cid => n  (ku,ten)
-jis = (ku+0x20) * 0x100 + (ten+0x20) 
