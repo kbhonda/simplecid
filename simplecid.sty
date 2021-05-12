@@ -7,7 +7,7 @@
 
 \cs_if_exist:NTF \Cjascale {\tl_set:Nn \l_sCID_scale {\Cjascale}} {\tl_set:Nn \l_sCID_scale {0.962216}}%%
 
-\DeclareOption{dvipdfmx}{\str_if_exist:NnF \c_sys_backend_str 
+\DeclareOption{dvipdfmx}{\str_if_exist:NF \c_sys_backend_str 
                                            {\str_gset:Nn \c_sys_backend_str {dvipdfmx}}
                         }
 
