@@ -4,20 +4,112 @@
 \usepackage{simplecid}
 
 
+\DeclareFontFamily{JY1}{shingo}{}
+\DeclareFontShape{JY1}{shingo}{db}{n}{<->  s * ShinGoPr6-DeBold-J}{}
+
+\DeclareFontFamily{JT1}{shingo}{}
+\DeclareFontShape{JT1}{shingo}{db}{n}{<-> ssub * gt/m/n}{}
+
+\sCIDSetting{font names => {min  -> A-OTF-RyuminPr6-Light.otf,
+                            goth -> A-OTF-GothicBBBPr6-Medium.otf,
+                            0    -> A-OTF-ShinGoPr6-DeBold.otf,
+                           },
+             NFSS names => {JY1/shingo/db/n -> 0,
+                           },
+}
+
 \ExplSyntaxOn
 \makeatletter
+
+\def\Maru#1{#1}
+
 \def\setX#1#2{
-\@namedef{#1List}{\int_step_inline:nnn {0}{#2}  {\use:c {sCID#1}{####1}}}
+   \@namedef{#1List}{  
+      \int_step_inline:nnn {0}{#2}  {\use:c{sCID#1}{####1}}\par
+      \clist_map_inline:nn {01,02,03,04,05,06,07,08,09} {\use:c{sCID#1}{####1}}\par
+      \clist_map_inline:nn {日,月,火,水,木,金,土} {\use:c{sCID#1}{####1}}\par
+      \str_if_eq:nnT {Maru} {#1}
+          {\clist_map_inline:nn {一,二,三,四,五,六,七,八,九,十} {\use:c{sCIDMaru}{####1}}}\par
+      \clist_map_inline:nn {A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,Y,U,V,W,X,Y,Z}
+                           {\use:c{sCID#1}{####1}}\par
+      \clist_map_inline:nn {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,y,u,v,w,x,y,z}
+                           {\use:c{sCID#1}{####1}}\par
+      \clist_map_inline:nn {あ,い,う,え,お,か,き,く,け,こ,さ,し,す,せ,そ,た,ち,つ,て,と,
+                            な,に,ぬ,ね,の,は,ひ,ふ,へ,ほ,ま,み,む,め,も,や,ゆ,よ,ら,り,
+                            る,れ,ろ,わ,ゐ,ゑ,を,ん}
+                           {\use:c{sCID#1}{####1}}\par
+      \clist_map_inline:nn {ア,イ,ウ,エ,オ,カ,キ,ク,ケ,コ,サ,シ,ス,セ,ソ,タ,チ,ツ,テ,ト,
+                            ナ,ニ,ヌ,ネ,ノ,ハ,ヒ,フ,ヘ,ホ,マ,ミ,ム,メ,モ,ヤ,ユ,ヨ,ラ,リ,
+                            ル,レ,ロ,ワ,ヰ,ヱ,ヲ,ン}
+                           {\use:c{sCID#1}{####1}}\par
+      \str_if_eq:nnT {Maru} {#1}
+         {\clist_map_inline:nn {上,中,下,左,右,〒,夜,企,医,協,名,宗,労,学,有,株,社,監,資,財,
+                               印,秘,大,小,優,控,調,注,副,減,標,欠,基,禁,項,休,女,男,正,写,
+                               祝,出,適,特,済,増,問,答,例,電,}
+                              {\use:c{sCID#1}{####1}}\sCIDMaru{}\par}
+      \str_if_eq:nnT {KuroMaru} {#1}
+          {\clist_map_inline:nn {問,答,例}{\use:c{sCID#1}{####1}}\sCIDKuroMaru{}\par}
+      \str_if_eq:nnT {KuroKaku} {#1}
+          {\clist_map_inline:nn {問,答,例}{\use:c{sCID#1}{####1}}\sCIDKuroKaku{}\par}
+      \str_if_eq:nnT {MaruKaku} {#1}
+          {\clist_map_inline:nn {問,答,例}{\use:c{sCID#1}{####1}}\par}
+      \str_if_eq:nnT {Kaku} {#1}
+          {\clist_map_inline:nn {負,勝,問,答,例}{\use:c{sCID#1}{####1}}\sCIDKaku{}\par}
+      \str_if_eq:nnT {KuroMaruKaku} {#1}
+          {\clist_map_inline:nn {問,答,例}{\use:c{sCID#1}{####1}}\sCIDKuroMaruKaku{}\par}
+   }
 }
+
+
+\def\KakkoList{\clist_map_inline:nn {00,01,02,03,04,05,06,07,08,09,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,Y,U,V,W,X,Y,Z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,y,u,v,w,x,y,z,日,月,火,水,木,金,土,祝,休,あ,い,う,え,お,か,き,く,け,こ,さ,し,す,せ,そ,た,ち,つ,て,と,な,に,ぬ,ね,の,は,ひ,ふ,へ,ほ,ま,み,む,め,も,や,ゆ,よ,ら,り,る,れ,ろ,わ,ゐ,ゑ,を,ん,ア,イ,ウ,エ,オ,カ,キ,ク,ケ,コ,サ,シ,ス,セ,ソ,タ,チ,ツ,テ,ト,ナ,ニ,ヌ,ネ,ノ,ハ,ヒ,フ,ヘ,ホ,マ,ミ,ム,メ,モ,ヤ,ユ,ヨ,ラ,リ,ル,レ,ロ,ワ,ヰ,ヱ,ヲ,ン,一,二,三,四,五,六,七,八,九,十,十一,十二,十三,十四,十五,十六,十七,十八,十九,二十,営,合,注,問,答,例,至,企,協,名,労,社,監,自,資,財,特,学,祭,呼,i,ii,iii,iv,v,vi,vii,viii,ix,x,xi,xii,xiii,xiv,xv,I,II,III,IV,V,VI,VII,VIII,IX,X,XI,XII,XIII,XIV,XV} {\sCIDKakko{##1}}}
+
+
+
+
+
+
+
+
+
+
+
+\def\List{%
+\MaruList\par
+%%%%%%%
+\sCIDNizyuMaru{1}\sCIDNizyuMaru{2}\sCIDNizyuMaru{3}%
+\sCIDNizyuMaru{4}\sCIDNizyuMaru{5}\sCIDNizyuMaru{6}%
+\sCIDNizyuMaru{7}\sCIDNizyuMaru{8}\sCIDNizyuMaru{9}%
+\sCIDNizyuMaru{10}\par
+%%%%%%%%%%%%%
+\MaruKakuList\par
+\KuroMaruList\par
+\KakuList\par
+\KuroKakuList\par
+\KuroMaruKakuList\par
+\KakkoList
+}
+
+\setX{MaruKaku}{100}
 \setX{Maru}{100}\setX{KuroMaru}{100}
 \setX{Kaku}{100}\setX{KuroKaku}{100}
 \setX{KuroMaruKaku}{100}
 \ExplSyntaxOff
 
 \begin{document}\parindent0pt
-\MaruList\par
-\KuroMaruList\par
-\KakuList\par
-\KuroKakuList\par
-%\KuroMaruKakuList\par
+
+
+\vskip\baselineskip
+
+\ExplSyntaxOn
+\def\hoge{Maru}
+\def\XX#1{
+      \clist_map_inline:nn {一,二,三,四,五,六,七,八,九,十} {\use:c{sCID#1}{##1}}\par
+}
+%\XX{Maru}
+%%\use:c{sCID\hoge}{五}\par
+%\ExplSyntaxOff
+
+\usekanji{JY1}{shingo}{db}{n}%
+
+\List
 \end{document}
