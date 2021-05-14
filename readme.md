@@ -50,7 +50,7 @@ simplecidパッケージは以下のファイルからなります．
             ...
             scid19-01.vf--scid19-03.vf       ：vfファイル群（88ファイル）
 
-インストールは，``simplecid.sty`と`scid-prop.dat`は`$texmf(-local)/tex/latex/simplecid`へ，tfmファイルは`$texmf(-local)/fonts/tfm/simplecid`へ，vfファイルは`$texmf(-local)/fonts/vf/simplecid`へコピーして，必要に応じて`mktexlsr`で`ls-R`を更新してください．もしくはカレントディレクトリにすべてをコピーすれば使えます．
+インストールは，`simplecid.sty`と`scid-prop.dat`は`$texmf(-local)/tex/latex/simplecid`へ，tfmファイルは`$texmf(-local)/fonts/tfm/simplecid`へ，vfファイルは`$texmf(-local)/fonts/vf/simplecid`へコピーして，必要に応じて`mktexlsr`で`ls-R`を更新してください．もしくはカレントディレクトリにすべてをコピーすれば使えます．
 
 
 ## \usepakageの書式
