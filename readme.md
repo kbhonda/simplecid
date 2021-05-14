@@ -180,7 +180,7 @@ simplecidパッケージのデフォルトは，TeXLive2020のデフォルトと
 
 font namesキーの値である連想配列では，キーはmin，goth，00～09，10～19の合計22通りです．これらをIDと呼ぶことにします．min，gothがそれぞれ明朝体，ゴシック体を表します．各IDには実際のフォント名を対応付けます．上の例では，minにはA-OTF-RyuminPro-Light.otfを，gothにはA-OTF-GothicBBBPro-Medium.otfを割り当てています．
 
-NFSS namesキーの値である連想配列では，キーはNFSSでのフォント名で，値は上述のIDです．ここではJY1/mc/m/nにminを，JY1/gt/m/n，JY1/mc/bx/nにgothを割り当てています．font namesと合わせることで，JY1/mc/m/nにはA-OTF-RyuminPro-Light.otfが，JY1/gt/m/n，JY1/mc/bx/nにはA-OTF-GothicBBBPro-Medium.otfが対応付けられます．
+NFSS namesキーの値である連想配列では，キーはNFSSでのフォント名で，値は上述のIDです．ここではJY1/mc/m/nにminを，JY1/gt/m/n，JY1/mc/bx?/nにgothを割り当てています．font namesと合わせることで，JY1/mc/m/nにはA-OTF-RyuminPro-Light.otfが，JY1/gt/m/n，JY1/mc/bx/nにはA-OTF-GothicBBBPro-Medium.otfが対応付けられます．
 
 このような対応によって，標準の明朝体がRyumin-Lightであり，ゴシック体がGothicBBB-Mediumである場合に，明朝体（JY1/mc/m/n）のところで`\sCID`などを用いた場合はA-OTF-RyuminPro-Light.otfが，ゴシック体（JY1/gt/m/n，JY1/mc/bx/n，JY1/mc/b/n）のところではA-OTF-GothicBBBPro-Medium.otfで出力されます．
 
