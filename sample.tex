@@ -10,11 +10,8 @@
 \DeclareFontFamily{JT1}{shingo}{}
 \DeclareFontShape{JT1}{shingo}{db}{n}{<-> ssub * gt/m/n}{}
 
-\sCIDSetting{font names => {min  -> A-OTF-RyuminPr6-Light.otf,
-                            goth -> A-OTF-GothicBBBPr6-Medium.otf,
-                            0    -> A-OTF-ShinGoPr6-DeBold.otf,
-                           },
-             NFSS names => {JY1/shingo/db/n -> 0,
+\sCIDSetting{font names => {min  -> A-OTF-RyuminPro-Light.otf,
+                            goth -> A-OTF-GothicBBBPro-Medium.otf,
                            },
 }
 
@@ -97,19 +94,6 @@
 
 \begin{document}\parindent0pt
 
-
-\vskip\baselineskip
-
-\ExplSyntaxOn
-\def\hoge{Maru}
-\def\XX#1{
-      \clist_map_inline:nn {一,二,三,四,五,六,七,八,九,十} {\use:c{sCID#1}{##1}}\par
-}
-%\XX{Maru}
-%%\use:c{sCID\hoge}{五}\par
-%\ExplSyntaxOff
-
-\usekanji{JY1}{shingo}{db}{n}%
 
 \List
 \end{document}
