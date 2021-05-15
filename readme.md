@@ -23,7 +23,7 @@ LPPLにしておきます．
 - pLaTeX2e（TeXLive2017 frozen or later）（upLaTeX2eは非対応）
 - dvipdfmx
 
-simplecidパッケージの実装にはexpl3を用いています．実装で用いられているexpl3の機能で代替が困難で一番新しいものはregexモジュールの`\regex_replace_all:nnN`です．また，付随するjfm/vfはJIS符号化に依存しますので，simplecidパッケージは2017年以降のexpl3が動作するバージョンのpLaTeX2e専用です．upLaTeX2eでは動作しません．JISではなくutf8に沿うようなtfm/vfファイルを作成すればupLaTeX2eに対応するできるとは思いますが，それは今後の課題とします．
+simplecidパッケージの実装にはexpl3を用いています．実装で用いられているexpl3の機能で代替が困難で一番新しいものはregexモジュールの`\regex_replace_all:nnN`です．また，付随するjfm/vfはJIS符号化に依存しますので，simplecidパッケージは2017年以降のexpl3が動作するバージョンのpLaTeX2e専用です．upLaTeX2eでは動作しません．JISではなくutf8に沿うようなtfm/vfファイルを作成すればupLaTeX2eに対応できるとは思いますが，それは今後の課題とします．
 
 現状ではドライバはdvipdfmxのみに対応してます．多少の手作業でmapファイルを書き換えて，パッケージオプションを適切にすればdvipsでも動作はするはずですがテストはしていません．
 
@@ -63,7 +63,7 @@ simplecidパッケージは以下のファイルからなります．
        <options>     := <option>*
        <option>      := <generateMap>|<embedMap>|<mapname>|<scale>
        <generateMap> := generateMap(\s*=\s*(<true>|<false>))?
-       <embdeMap>    := embedMap(\s*=\s*(<true>|<false>))?
+       <embedMap>    := embedMap(\s*=\s*(<true>|<false>))?
        <mapname>     := mapname(\s*=\s*<mapfile>)?
        <scale>       := scale(\s*=\s*([1-9][0-9]+)?(\.[0-9]+))
 
@@ -72,14 +72,14 @@ simplecidパッケージは以下のファイルからなります．
        <mapfile>     := 任意のファイル名
 
 
-`\usepackage`に与えることのできるオプションは<key>=<val>形式です．
+`\usepackage`に与えることのできるオプションは`<key>=<val>`形式です．
 
 - generateMap 
   `generateMap=true`ではsimplecidパッケージが必要とするmapファイルを自動生成します．`generateMap=false`の場合は生成しません．値を省略してgenerateMapだけとした場合はtrueが指定されたとみなされます．デフォルトはgenerateMap=trueです．
 - embedMap 
-  `embedeMap=true`ではsimplecidパッケージが必要とするmapファイル名をdviファイルに埋め込みます．`embedMap=false`の場合は埋め込みません．値を省略してembedMapだけとした場合はtrueが指定されたとみなされます．埋め込まれるmapファイルのファイル名はmapnameオプションで指定されるものです．デフォルトは`embedMap=true`です．
+  `embedMap=true`ではsimplecidパッケージが必要とするmapファイル名をdviファイルに埋め込みます．`embedMap=false`の場合は埋め込みません．値を省略してembedMapだけとした場合はtrueが指定されたとみなされます．埋め込まれるmapファイルのファイル名はmapnameオプションで指定されるものです．デフォルトは`embedMap=true`です．
 - mapfile
-  simplecidパッケージが生成する（そして埋め込むことを指定できる）mapファイルのファイル名を指定します．`mapfile=hoge.map`で，`generateMap=true`の場合にhoge.mapが生成され，`embedMap=true`の場合に`hoge.map`が埋め込まれます．ファイル名を指定しなかった場合は，`scidfonts-`<driver>`.map`となります．実際のところは`scidfonts-dvipdfmx.map`になります．
+  simplecidパッケージが生成する（そして埋め込むことを指定できる）mapファイルのファイル名を指定します．`mapfile=hoge.map`で，`generateMap=true`の場合に`hoge.map`が生成され，`embedMap=true`の場合に`hoge.map`が埋め込まれます．ファイル名を指定しなかった場合は，`scidfonts-`<driver>`.map`となります．実際のところは`scidfonts-dvipdfmx.map`になります．
 - scale
   simplecidパッケージが出力する文字や記号の大きさを表す比率です．10ptの欧文に対してscaleの値を10倍にした大きさの文字を出力します．このオプションはクラスファイルで与えられる`\Cjascale`の値が何らかの事情で実際の和文サイズを表さない場合にのみ使用して下さい．また`\Cjascale`が未定義の場合はpTeXの標準にあわせて10ptの欧文に対して，9.62216ptとなるようにしていますが，このときの0.962216という比率が不正な場合もこのオプションで正しいものに修正してください．
 
