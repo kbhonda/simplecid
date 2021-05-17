@@ -7,7 +7,7 @@
 
 \cs_if_exist:NTF \Cjascale {\tl_set:Nn \l_sCID_scale {\Cjascale}} {\tl_set:Nn \l_sCID_scale {0.962216}}%%
 
-\DeclareOption{dvipdfmx}{\str_if_exist:NF \c_sys_backend_str 
+\DeclareOptionX{dvipdfmx}[true]{\str_if_exist:NF \c_sys_backend_str 
                                            {\str_gset:Nn \c_sys_backend_str {dvipdfmx}}
                         }
 
@@ -21,9 +21,8 @@
 
 \DeclareOptionX{scale}{\tl_set:Nn \l_sCID_scale {#1}}
 
-\ExecuteOptions{dvipdfmx}
-\ProcessOptions
-\ExecuteOptionsX{generateMap,embedMap,mapname}
+
+\ExecuteOptionsX{dvipdfmx,generateMap,embedMap,mapname}
 \ProcessOptionsX
 
 \iow_new:N \l_mapfile_sCID_iow
