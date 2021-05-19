@@ -78,12 +78,12 @@ simplecidパッケージは以下のファイルからなります．
   `generateMap=true`ではsimplecidパッケージが必要とするmapファイルを自動生成します．`generateMap=false`の場合は生成しません．値を省略してgenerateMapだけとした場合はtrueが指定されたとみなされます．デフォルトはgenerateMap=trueです．
 - embedMap 
   `embedMap=true`ではsimplecidパッケージが必要とするmapファイル名をdviファイルに埋め込みます．`embedMap=false`の場合は埋め込みません．値を省略してembedMapだけとした場合はtrueが指定されたとみなされます．埋め込まれるmapファイルのファイル名はmapnameオプションで指定されるものです．デフォルトは`embedMap=true`です．
-- mapfile
+- mapnanme
   simplecidパッケージが生成する（そして埋め込むことを指定できる）mapファイルのファイル名を指定します．`mapfile=hoge.map`で，`generateMap=true`の場合に`hoge.map`が生成され，`embedMap=true`の場合に`hoge.map`が埋め込まれます．ファイル名を指定しなかった場合は，`scidfonts-`<driver>`.map`となります．実際のところは`scidfonts-dvipdfmx.map`になります．
 - scale
   simplecidパッケージが出力する文字や記号の大きさを表す比率です．10ptの欧文に対してscaleの値を10倍にした大きさの文字を出力します．このオプションはクラスファイルで与えられる`\Cjascale`の値が何らかの事情で実際の和文サイズを表さない場合にのみ使用して下さい．また`\Cjascale`が未定義の場合はpTeXの標準にあわせて10ptの欧文に対して，9.62216ptとなるようにしていますが，このときの0.962216という比率が不正な場合もこのオプションで正しいものに修正してください．
 
-ほかにも`simplecid.sty`の中を見ればわかる通りdvipdfmxオプションが存在しますが，これは`\documentclass`から引き継がれるグローバルオプション`dvipdfmx`の処理と，`\c_sys_backend_str`が未定義のexpl3への対処なのでとくに指定する必要はありません．そもそもsimplecidパッケージはdvipdfmx専用です．
+ほかにも`simplecid.sty`の中を見ればわかる通りdvipdfmxオプションが存在しますが，これは`\documentclass`から引き継がれるグローバルオプション`dvipdfmx`の処理と，`\c_sys_backend_str`が定義されていないバージョンのexpl3への対処なのでとくに指定する必要はありません．そもそもsimplecidパッケージはdvipdfmx専用です．
 
 ## コマンド
 
