@@ -166,4 +166,18 @@
 
 \cs_new:Npn \sCIDKakko     #1{\sCIDSym{(#1)}}
 
+%%aliases for sCID jp04 varaints
+\file_input:n {scid-prop-jp04.dat}
+
+\msg_new:nnn {sCID} {nojp04var}
+             {\msg_warning_text {#1}^^J
+              A~Kanji~which~does~not~have~jp04~variant~is~used.^^J
+              The~Kanji~itself~is~used. }
+
+\cs_new:Npn \sCIDKanZF #1 {
+   \prop_if_in:NnTF \g_scid_jpZeroFour_prop {#1}
+      { \sCID{ \prop_item:Nn \g_scid_jpZeroFour_prop {#1} } }
+      { \msg_warning:nnn {sCID}{nojp04var}{simplecid} #1 } 
+}
+
 \endinput
