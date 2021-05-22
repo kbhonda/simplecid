@@ -149,10 +149,9 @@
 \kern-1zw\char\jis"2121\relax%% guard by jghost end
 }
 
+%%%aliases for sCID symbols
 \file_input:n {scid-prop-symlist.dat}
 
-
-%%%aliases for sCID
 \cs_new:Npn \sCIDSym #1 {
     \sCID{\prop_item:Nn \g_scid_symlist_prop {#1}}
 }
