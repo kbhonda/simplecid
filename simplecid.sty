@@ -3,6 +3,7 @@
 \ProvidesExplPackage{simplecid}{2021/05/12}{1.0beta2}{using CID for outputing letter}
 
 \RequirePackage{xkeyval}
+\RequirePackage{xparse}
 \RequirePackage{pxatbegshi}
 
 \cs_if_exist:NTF \Cjascale {\tl_set:Nx \l_sCID_scale {\Cjascale}} {\tl_set:Nn \l_sCID_scale {0.962216}}%%
@@ -21,8 +22,9 @@
 
 \DeclareOptionX{scale}{\tl_set:Nn \l_sCID_scale {#1}}
 
+\DeclareOptionX{JisVar}[04jp]{\tl_set:Nn \l_jpbar_sCID {#1}}
 
-\ExecuteOptionsX{dvipdfmx,generateMap,embedMap,mapname}
+\ExecuteOptionsX{dvipdfmx,generateMap,embedMap,mapname,JisVar}
 \ProcessOptionsX
 
 \iow_new:N \l_mapfile_sCID_iow
@@ -174,9 +176,29 @@
              A~Kanji~which~does~not~have~jp04~variant~is~used.^^J
              The~Kanji~itself~is~used~at~\msg_line_number:.}
 
-\cs_new:Npn \sCIDKanZF #1 {
+\cs_set:cn {sCID_JisVar_90jp:} {
+   \int_set:Nn \l_tmpa_int {2}
+   \int_set:Nn \l_tmpb_int {1}
+}
+
+\NewDocumentCommand{\sCIDJisVar} {t' m} {
+   \int_set:Nn \l_tmpa_int {1}
+   \int_set:Nn \l_tmpb_int {2}
+   \tl_if_eq:NnT \l_jpbar_sCID {90jp} {
+      \int_set:Nn \l_tmpa_int {2}
+      \int_set:Nn \l_tmpb_int {1}
+   }
+   \IfBooleanTF {#1}
+     { \_sCIDJisVariant {#2} {\int_use:N \l_tmpb_int} }
+     { \_sCIDJisVariant {#2} {\int_use:N \l_tmpa_int} }
+}
+
+\cs_new:Npn \_sCIDJisVariant #1 #2 {
    \prop_if_in:NnTF \g_scid_jpZeroFour_prop {#1}
-      { \sCID{ \prop_item:Nn \g_scid_jpZeroFour_prop {#1} } }
+      { 
+       \clist_set:Nx \l_tmpa_clist {\prop_item:Nn \g_scid_jpZeroFour_prop {#1} } 
+       \sCID { \clist_item:Nn \l_tmpa_clist {#2}  }
+      }
       { \msg_warning:nnn {sCID}{nojp04var}{simplecid} #1 } 
 }
 

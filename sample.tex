@@ -1,7 +1,7 @@
 \documentclass[dvipdfmx]{jarticle}
 
 
-\usepackage{simplecid}
+\usepackage[JisVar=90jp]{simplecid}
 
 
 \DeclareFontFamily{JY1}{shingo}{}
@@ -88,7 +88,10 @@
 
 \begin{document}\parindent0pt
 
-\sCIDKanZF{辻}\sCIDKanZF{高}
+\sCIDJisVar{辻}
+\sCIDJisVar'{辻}
+
+\sCIDJisVar'{高}
 
 \List
 \end{document}
