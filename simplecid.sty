@@ -135,7 +135,7 @@
                     Set~the~ID~and~actual~font~for~
                     \k@encoding/\k@family/\k@series/\k@shape\space Using~\token_to_str:N\sCIDSetting.} 
 
-\cs_gset:Npn \sCID #1 {
+\NewDocumentCommand \sCID {m} {
 \char\jis"2121\kern-1zw%% guard by jghost begin
 \group_begin:    
    \int_set:Nn \l_sCID_n_int   {\int_div_truncate:nn {#1-1} {8836}}
@@ -154,19 +154,18 @@
 %%%aliases for sCID symbols
 \file_input:n {scid-prop-symlist.dat}
 
-\cs_new:Npn \sCIDSym #1 {
+\NewDocumentCommand \sCIDSym {m} {
     \sCID{\prop_item:Nn \g_scid_symlist_prop {#1}}
 }
 
-\cs_new:Npn \sCIDMaru      #1{\sCIDSym{丸#1}}
-\cs_new:Npn \sCIDNizyuMaru #1{\sCIDSym{丸丸#1}}
-\cs_new:Npn \sCIDKuroMaru  #1{\sCIDSym{黒丸#1}}
-\cs_new:Npn \sCIDKuroKaku  #1{\sCIDSym{黒角#1}}
-\cs_new:Npn \sCIDKaku      #1{\sCIDSym{角#1}}
-\cs_new:Npn \sCIDMaruKaku  #1{\sCIDSym{丸角#1}}
-\cs_new:Npn \sCIDKuroMaruKaku  #1{\sCIDSym{黒丸角#1}}%
-
-\cs_new:Npn \sCIDKakko     #1{\sCIDSym{(#1)}}
+\NewDocumentCommand \sCIDMaru         {m} {\sCIDSym{丸#1}}
+\NewDocumentCommand \sCIDNizyuMaru    {m} {\sCIDSym{丸丸#1}}
+\NewDocumentCommand \sCIDKuroMaru     {m} {\sCIDSym{黒丸#1}}
+\NewDocumentCommand \sCIDKuroKaku     {m} {\sCIDSym{黒角#1}}
+\NewDocumentCommand \sCIDKaku         {m} {\sCIDSym{角#1}}
+\NewDocumentCommand \sCIDMaruKaku     {m} {\sCIDSym{丸角#1}}
+\NewDocumentCommand \sCIDKuroMaruKaku {m} {\sCIDSym{黒丸角#1}}%
+\NewDocumentCommand \sCIDKakko        {m} {\sCIDSym{(#1)}}
 
 %%aliases for sCID jp04 varaints
 \file_input:n {scid-prop-jp04.dat}
