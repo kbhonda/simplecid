@@ -183,7 +183,8 @@
 \NewDocumentCommand{\sCIDJisVar} {t' m} {
    \int_set:Nn \l_tmpa_int {1}
    \int_set:Nn \l_tmpb_int {2}
-   \tl_if_eq:NnT \l_jpbar_sCID {90jp} {
+   \tl_set:Nn \l_tmpa_tl {90jp}
+   \tl_if_eq:NNT \l_jpbar_sCID \l_tmpa_tl {
       \int_set:Nn \l_tmpa_int {2}
       \int_set:Nn \l_tmpb_int {1}
    }
