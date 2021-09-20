@@ -25,7 +25,7 @@ LPPLにしておきます．
 
 simplecidパッケージの実装にはexpl3を用いています．実装で用いられているexpl3の機能のうち代替が困難で一番新しいものはregexモジュールの`\regex_replace_all:nnN`です．また付随するjfm/vfはJIS符号化に依存しています．したがってsimplecidパッケージは2017年以降のexpl3が動作するバージョンのpLaTeX2e専用です．upLaTeX2eでは動作しません．JISではなくutf8に沿うようなtfm/vfファイルを作成すればupLaTeX2eに対応できるとは思いますが，それは今後の課題とします．
 
-###TeXLive2019での動作
+### TeXLive2019での動作
 2021/9/20までTeXLive2019では動作していませんでした．NFSS2の多軸化に関する`\DeclareFontShape`の内部のコードの影響で，`\DeclareFontShape`の引数にマクロを使用した際にその展開のタイミングの問題で適切に動いていませんでした．TeXLive2020ではその部分のコードが変更されて問題は解消されたのですが，simplecidパッケージの側で引数を展開して渡すように`\exp_args`の変種を作って対処しました．
 
 
